@@ -1,0 +1,7 @@
+org\uv\bdncpractica01correccion\BDNCPractica01Correccion.class
+org\uv\bdncpractica01correccion\DAODepartamento.class
+org\uv\bdncpractica01correccion\DAOEmpleado.class
+org\uv\bdncpractica01correccion\IDAOGeneral.class
+org\uv\bdncpractica01correccion\ConexionDB.class
+org\uv\bdncpractica01correccion\Departamento.class
+org\uv\bdncpractica01correccion\Empleado.class
