@@ -45,9 +45,9 @@ public class DAOProductos implements IDAOGeneral<Producto> {
     public List<Producto> findAll() {
         Session session  = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction t = session.beginTransaction();
-        List<Producto> lstProducto = session.createQuery("from productos", Producto.class).list();
+        List<Producto> lstProducto = session.createQuery("from Producto", Producto.class).list();
         t.commit();
-        return null;
+        return lstProducto;
     }
 
 //    @Override

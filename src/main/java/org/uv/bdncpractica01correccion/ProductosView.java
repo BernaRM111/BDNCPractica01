@@ -4,6 +4,8 @@
  */
 package org.uv.bdncpractica01correccion;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,13 +17,50 @@ import javax.swing.table.TableModel;
  */
 public class ProductosView extends javax.swing.JInternalFrame {
 
+    private DAOProductos daoE = new DAOProductos();
+    private ProductoTableModel<Producto> pro = null;
+
     /**
      * Creates new form ProductosView
      */
     public ProductosView() {
         initComponents();
+//        String[] columnNames = {"Clave", "Nombre", "Precio Compra", "Precio Venta"};
+//        List<Producto> lstProductos = daoE.findAll();
+//        pro = new ProductoTableModel<Producto>(columnNames, lstProductos) {
+//
+//            @Override
+//            public Object getValueAt(int rowIndex, int columnIndex) {
+//                switch (columnIndex) {
+//                    case 0:return lstValores.get(rowIndex).getId();
+//                    case 1:return lstValores.get(rowIndex).getDescripcion();
+//                    case 2:return lstValores.get(rowIndex).getPrecioCompra();
+//                    case 3:return lstValores.get(rowIndex).getPrecioVenta();
+//                    default:return null;
+//                }
+//            }
+//
+//        }; 
+//                //        Producto p1 = new Producto();
+//                //        p1.setId(1);
+//                //        p1.setDescripcion("Jabon");
+//                //        Producto p2 = new Producto();
+//                //        p2.setId(2);
+//                //        p2.setDescripcion("Otro");
+//                //        
+//                //        lstProducto.add(p1);
+//                //        lstProducto.add(p2);
+//        
+////        ProductoTableModel pro = new ProductoTableModel(lstProducto);
+//        jTable1.setModel(pro);
     }
-    
+
+//    private void fillTable() {
+//        List<Producto> lstProductos = new ArrayList<>();
+//        ProductoTableModel model = new ProductoTableModel {};
+//        jTable1.setModel(model);
+//    }
+
 //    private void fillTable(){
 //        Vector<Vector<Producto>> lstProductos = new Vector<>();
 ////        Vector <Producto> lstProductos = new Vector<>();
@@ -34,8 +73,6 @@ public class ProductosView extends javax.swing.JInternalFrame {
 //        TableModel model= new DefaultTableModel(lstProductos, lstData);
 //        jTable1.setModel(model);
 //    }
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -254,12 +291,12 @@ public class ProductosView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         DAOProductos producto_dao = new DAOProductos();
         Producto producto = new Producto();
-        
-        if(txtClave.getText().equals("")){
+
+        if (txtClave.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "digite el id a buscar");
-        }else{
+        } else {
             int id = Integer.parseInt(txtClave.getText());
-            
+
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -299,7 +336,35 @@ public class ProductosView extends javax.swing.JInternalFrame {
 
     private void btnBuscarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarTodosActionPerformed
         // TODO add your handling code here:
+        String[] columnNames = {"Clave", "Nombre", "Precio Compra", "Precio Venta"};
+        List<Producto> lstProductos = daoE.findAll();
+        pro = new ProductoTableModel<Producto>(columnNames, lstProductos) {
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                switch (columnIndex) {
+                    case 0:return lstValores.get(rowIndex).getId();
+                    case 1:return lstValores.get(rowIndex).getDescripcion();
+                    case 2:return lstValores.get(rowIndex).getPrecioCompra();
+                    case 3:return lstValores.get(rowIndex).getPrecioVenta();
+                    default:return null;
+                }
+            }
+
+        }; 
+                //        Producto p1 = new Producto();
+                //        p1.setId(1);
+                //        p1.setDescripcion("Jabon");
+                //        Producto p2 = new Producto();
+                //        p2.setId(2);
+                //        p2.setDescripcion("Otro");
+                //        
+                //        lstProducto.add(p1);
+                //        lstProducto.add(p2);
         
+//        ProductoTableModel pro = new ProductoTableModel(lstProducto);
+        jTable1.setModel(pro);
+
     }//GEN-LAST:event_btnBuscarTodosActionPerformed
 
 
