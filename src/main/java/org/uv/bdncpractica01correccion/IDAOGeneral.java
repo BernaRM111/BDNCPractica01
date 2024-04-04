@@ -13,8 +13,9 @@ import java.util.List;
 public interface IDAOGeneral <T>{
     public boolean save (T p);
     public boolean edit (T p);
-    public boolean delete (int id);
-    public T findById(int id);
+    public boolean delete (T p);
+//    public boolean delete (int id);
+    public T findById(long id);
     public List<T> findAll();
     
 }

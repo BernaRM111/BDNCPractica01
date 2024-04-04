@@ -26,12 +26,12 @@ public class DAODepartamento implements IDAOGeneral<Departamento>{
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Departamento p) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Departamento findById(int id) {
+    public Departamento findById(long id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

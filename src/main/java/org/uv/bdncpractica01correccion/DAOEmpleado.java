@@ -28,12 +28,12 @@ public class DAOEmpleado implements IDAOGeneral<Empleado> {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Empleado p) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Empleado findById(int id) {
+    public Empleado findById(long id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

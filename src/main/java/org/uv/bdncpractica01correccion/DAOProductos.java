@@ -28,17 +28,40 @@ public class DAOProductos implements IDAOGeneral<Producto> {
 
     @Override
     public boolean edit(Producto p) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
+            session.beginTransaction();
+            session.update(p);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public boolean delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean delete(Producto p) {
+//        SessionFactory sf = HibernateUtil.getSessionFactory();
+//        Session session = sf.getCurrentSession();
+        Session session  = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tran = session.beginTransaction();
+        session.delete(p);
+
+        tran.commit();
+        return true;
     }
 
     @Override
-    public Producto findById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Producto findById(long id) {
+        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
+            session.beginTransaction();
+            Producto prod = session.get(Producto.class, id);
+            session.getTransaction().commit();
+            return prod;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

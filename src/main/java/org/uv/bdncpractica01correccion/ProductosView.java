@@ -60,7 +60,6 @@ public class ProductosView extends javax.swing.JInternalFrame {
 //        ProductoTableModel model = new ProductoTableModel {};
 //        jTable1.setModel(model);
 //    }
-
 //    private void fillTable(){
 //        Vector<Vector<Producto>> lstProductos = new Vector<>();
 ////        Vector <Producto> lstProductos = new Vector<>();
@@ -110,6 +109,11 @@ public class ProductosView extends javax.swing.JInternalFrame {
         btnNuevo.setText("Nuevo");
         btnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnNuevo);
 
         btnModificar.setText("Modificar");
@@ -127,6 +131,11 @@ public class ProductosView extends javax.swing.JInternalFrame {
         btnEliminar.setFocusable(false);
         btnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnEliminar);
 
         btnGuardar.setText("Guardar");
@@ -288,50 +297,87 @@ public class ProductosView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtDescripcionActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-        DAOProductos producto_dao = new DAOProductos();
-        Producto producto = new Producto();
-
-        if (txtClave.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "digite el id a buscar");
+        if (txtClave.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor ingrese un ID para buscar");
         } else {
-            int id = Integer.parseInt(txtClave.getText());
-
+            try {
+                int id = Integer.parseInt(txtClave.getText());
+                Producto producto = daoE.findById(id);
+                if (producto != null) {
+                    txtDescripcion.setText(producto.getDescripcion());
+                    txtPrecioCompra.setText(String.valueOf(producto.getPrecioCompra()));
+                    txtPrecioVenta.setText(String.valueOf(producto.getPrecioVenta()));
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró un producto con el ID especificado");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El ID debe ser un número entero");
+            }
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        Producto p = new Producto();
-//        p.setId(Integer.parseInt(txtClave.getText()));
-        p.setDescripcion(txtDescripcion.getText());
-        p.setPrecioVenta(Double.parseDouble(txtPrecioVenta.getText()));
-        p.setPrecioCompra(Double.parseDouble(txtPrecioCompra.getText()));
-
-        DAOProductos daoE = new DAOProductos();
-        boolean res = daoE.save(p);
-        if (res) {
-            JOptionPane.showMessageDialog(this, "Se guardó correctamente");
+        if (txtDescripcion.getText().isEmpty() || txtPrecioCompra.getText().isEmpty() || txtPrecioVenta.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor complete todos los campos");
         } else {
-            JOptionPane.showMessageDialog(this, "Error al guardar");
+            try {
+                Producto p = new Producto();
+                p.setDescripcion(txtDescripcion.getText());
+                p.setPrecioCompra(Double.parseDouble(txtPrecioCompra.getText()));
+                p.setPrecioVenta(Double.parseDouble(txtPrecioVenta.getText()));
+
+                boolean res = daoE.save(p);
+                if (res) {
+                    JOptionPane.showMessageDialog(null, "Producto guardado correctamente");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar el producto");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Por favor ingrese un valor numérico válido para Precio Compra y Precio Venta");
+            }
         }
+//        Producto p = new Producto();
+////        p.setId(Integer.parseInt(txtClave.getText()));
+//        p.setDescripcion(txtDescripcion.getText());
+//        p.setPrecioVenta(Double.parseDouble(txtPrecioVenta.getText()));
+//        p.setPrecioCompra(Double.parseDouble(txtPrecioCompra.getText()));
+//
+//        DAOProductos daoE = new DAOProductos();
+//        boolean res = daoE.save(p);
+//        if (res) {
+//            JOptionPane.showMessageDialog(this, "Se guardó correctamente");
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Error al guardar");
+//        }
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
-        Producto p = new Producto();
-        p.setDescripcion(txtDescripcion.getText());
-        p.setPrecioVenta(Double.parseDouble(txtPrecioVenta.getText()));
-        p.setPrecioCompra(Double.parseDouble(txtPrecioCompra.getText()));
-
-        DAOProductos daoE = new DAOProductos();
-        boolean res = daoE.save(p);
-        if (res) {
-            JOptionPane.showMessageDialog(this, "Se guardó correctamente");
+        if (txtClave.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor ingrese un ID para modificar");
         } else {
-            JOptionPane.showMessageDialog(this, "Error al guardar");
+            try {
+                int id = Integer.parseInt(txtClave.getText());
+                Producto producto = daoE.findById(id);
+                if (producto != null) {
+                    producto.setDescripcion(txtDescripcion.getText());
+                    producto.setPrecioVenta(Double.parseDouble(txtPrecioVenta.getText()));
+                    producto.setPrecioCompra(Double.parseDouble(txtPrecioCompra.getText()));
+                    boolean success = daoE.edit(producto);
+                    if (success) {
+                        JOptionPane.showMessageDialog(null, "Producto modificado correctamente");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al modificar el producto");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró un producto con el ID especificado");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El ID debe ser un número entero");
+            }
         }
+
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnBuscarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarTodosActionPerformed
@@ -343,29 +389,78 @@ public class ProductosView extends javax.swing.JInternalFrame {
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
                 switch (columnIndex) {
-                    case 0:return lstValores.get(rowIndex).getId();
-                    case 1:return lstValores.get(rowIndex).getDescripcion();
-                    case 2:return lstValores.get(rowIndex).getPrecioCompra();
-                    case 3:return lstValores.get(rowIndex).getPrecioVenta();
-                    default:return null;
+                    case 0:
+                        return lstValores.get(rowIndex).getId();
+                    case 1:
+                        return lstValores.get(rowIndex).getDescripcion();
+                    case 2:
+                        return lstValores.get(rowIndex).getPrecioCompra();
+                    case 3:
+                        return lstValores.get(rowIndex).getPrecioVenta();
+                    default:
+                        return null;
                 }
             }
 
-        }; 
-                //        Producto p1 = new Producto();
-                //        p1.setId(1);
-                //        p1.setDescripcion("Jabon");
-                //        Producto p2 = new Producto();
-                //        p2.setId(2);
-                //        p2.setDescripcion("Otro");
-                //        
-                //        lstProducto.add(p1);
-                //        lstProducto.add(p2);
-        
+        };
+        //        Producto p1 = new Producto();
+        //        p1.setId(1);
+        //        p1.setDescripcion("Jabon");
+        //        Producto p2 = new Producto();
+        //        p2.setId(2);
+        //        p2.setDescripcion("Otro");
+        //        
+        //        lstProducto.add(p1);
+        //        lstProducto.add(p2);
+
 //        ProductoTableModel pro = new ProductoTableModel(lstProducto);
         jTable1.setModel(pro);
 
     }//GEN-LAST:event_btnBuscarTodosActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        // TODO add your handling code here:
+        txtClave.setText("");
+        txtDescripcion.setText("");
+        txtPrecioCompra.setText("");
+        txtPrecioVenta.setText("");
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        if (txtClave.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor ingrese un ID para eliminar");
+        } else {
+            try {
+                int idProducto = Integer.parseInt(txtClave.getText());
+                Producto p = daoE.findById(idProducto);
+                if (p != null) {
+                    boolean res = daoE.delete(p);
+                    if (res) {
+                        JOptionPane.showMessageDialog(null, "Producto eliminado correctamente");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al eliminar el producto");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró un producto con el ID especificado");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El ID debe ser un número entero");
+            }
+        }
+//        int idProducto = Integer.parseInt(txtClave.getText());
+//
+//        Producto p = new Producto();
+//        p.setId(idProducto);
+//
+//        DAOProductos daoE = new DAOProductos();
+//        boolean res = daoE.delete(p);
+//        if (res) {
+//            JOptionPane.showMessageDialog(this, "Se elimino correctamente");
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Error al eliminar");
+//        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
